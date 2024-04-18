@@ -1,50 +1,37 @@
-import React, {useState, useEffect} from 'react';
-import { fetchDailyData } from '../../api';
-import { Line, Bar } from  'react-chartjs-2';
+import React, { useState, useEffect } from "react";
+import styles from "./Chart.module.css";
+import BubbleChart from "./bubbleChart";
+import LineChart from "./lineChart";
+import BarChart from "./barChart";
+import DoughnutChart from "./doughnutChart";
 
-import styles from './Chart.module.css';
+const Chart = ({ country, fetchedData }) => {
+  const [filteredData, setFilteredData] = useState([]);
 
+  useEffect(() => {
+    const filterDataByCountry = () => {
+      if (country !== "global") {
+        setFilteredData(fetchedData.filter((data) => data.country === country));
+      } else {
+        setFilteredData(fetchedData);
+      }
+    };
 
-const Chart = () => {
-    const [dailyData,setDailyData] = useState([]);
+    filterDataByCountry();
+  }, [country, fetchedData]);
 
-    useEffect(() => {
-       const fetchApi = async () => {
-           setDailyData(await fetchDailyData());
-       }
-      
-      fetchApi();
-    }
-    );
-
-    const lineChart = (
-        dailyData?.length
-        ? (
-            <Line
-                data={{
-                    labels: dailyData.map(( { date }) => date),
-                    datasets: [{
-                        data: dailyData.map(( { confirmed }) => confirmed),
-                        label: 'Infected',
-                        borderColor: '#3333ff',
-                        fill: true,
-                    },
-                     {
-                        data: dailyData.map(( { deaths }) => deaths),
-                        label: 'Deaths',
-                        borderColor: 'red',
-                        backgroundColor:'rgba(255,0,0,0.5)',
-                        fill: true,
-                     }],
-                }}
-            />
-        ) : null
-    );
-    return(
-        <div className= {styles.container}>
-            {lineChart}
-        </div>
-    );
-}
+  return (
+    <div className={styles.container}>
+      <div className={styles.row}>
+        <LineChart dailyData={filteredData} />
+        <BubbleChart dailyData={filteredData} />
+      </div>
+      <div className={styles.row}>
+        <DoughnutChart dailyData={filteredData} />
+        <BarChart dailyData={filteredData} />
+      </div>
+    </div>
+  );
+};
 
 export default Chart;
