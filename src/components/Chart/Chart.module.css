@@ -1,5 +1,31 @@
 .container {
+  width: 40%;
+  margin: 40px;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+}
+.row > * {
+  margin-right: 30px;
+  margin-bottom: 30px;
+}
+
+@media (max-width: 768px) {
+  /* Adjust for mobile view */
+  .container {
+    width: 90%;
+    margin: 20px auto;
+  }
+  .row {
     display: flex;
     justify-content: center;
-    width: 85%;
+    flex-wrap: wrap;
+  }
+
+  .row > * {
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
 }

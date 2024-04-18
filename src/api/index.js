@@ -1,51 +1,25 @@
-import axios from 'axios';
+// Define mock data
+const mockData = {
+  confirmed: { value: 100000 },
+  recovered: { value: 50000 },
+  deaths: { value: 2500 },
+  lastUpdate: new Date().toISOString(),
+};
 
-const url = 'https://covid19.mathdro.id/api';
+const mockDailyData = [
+  { confirmed: 10, deaths: 1, date: "2024-03-21", country: "Country 1" },
+  { confirmed: 50, deaths: 7, date: "2024-03-25", country: "Country 1" },
+  { confirmed: 100, deaths: 10, date: "2024-04-01", country: "Country 1" },
+  { confirmed: 120, deaths: 15, date: "2024-04-02", country: "Country 2" },
+  { confirmed: 150, deaths: 16, date: "2024-04-03", country: "Country 2" },
+  { confirmed: 170, deaths: 18, date: "2024-04-04", country: "Country 3" },
+  { confirmed: 200, deaths: 20, date: "2024-04-05", country: "Country 3" },
+];
 
-export const fetchData = async (country) => {
-    let changeableUrl = url;
-
-    if (country) {
-        changeableUrl = `${url}/countries/${country}`;
-    }
-    try {
-        const { data }= await axios.get(url);
-
-        const modifiedData = {
-            confirmed : data.confirmed,
-            recovered : data.recovered,
-            deaths    : data.deaths,
-            lastUpdate : data.lastUpdate,
-        }
-        return(modifiedData);
-    }
-    catch (error) {
-        
-    }
-}
+export const fetchData = async () => {
+  return mockData;
+};
 
 export const fetchDailyData = async () => {
-    try {
-      const { data } = await axios.get(`${url}/daily`);
-        const modifiedData = data.map((dailyData) => ({
-            confirmed:dailyData.confirmed.total,
-            deaths:dailyData.deaths.total,
-            date:dailyData.reportDate,
-        }));
-        return modifiedData;
-    }
-    catch (error) {
-     console.log(error);
-    }
-}
-
-export const fetchCountries = async () => {
-    try{
-        const {data : {countries}} = await axios.get(`${url}/countries`);
-        return countries.map((country) => country.name);
-    }
-    catch (error) {
-        console.log(error);
-    }
-}
-
+  return mockDailyData;
+};
